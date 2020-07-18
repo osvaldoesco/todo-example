@@ -27,14 +27,25 @@ const List = () =>  {
 
   const [taskList, setTaskList] = useState(tasks);
   const [inputText, setInputText] = useState('');
+  const [emptyInputText, setEmptyInputText] = useState('');
 
   const handleAddTaskClick = () => {
-    const newTask = {
-      id: uuidv4(),
-      title: inputText,
-      status: status.pending,
-    };
-    setTaskList([...taskList, newTask]);
+    if(inputText != ''){
+      const newTask = {
+        id: uuidv4(),
+        title: inputText,
+        status: status.pending,
+      };
+      setTaskList([...taskList, newTask]);
+      setInputText('');
+      setEmptyInputText('');
+    }else{
+      setEmptyInputText(<div class="alert alert-danger" role="alert">
+      El campo no puede estar vacio</div>);
+    }
+
+
+    
   }
 
   const childClick = (id, st) => {
@@ -47,8 +58,13 @@ const List = () =>  {
     setTaskList(newTaskList);
   }
 
+  const deleteChildClick = (childId) => {
+    const newTaskList = taskList.filter(({id}) => id != childId);
+    setTaskList(newTaskList);
+  }
+
   return (
-    <>
+    <div >
       <h1>TO DO List</h1>
       <ul className="list-group">
         { 
@@ -58,6 +74,7 @@ const List = () =>  {
               status={status} 
               id={id} 
               onClick={childClick}
+              onDeleteClick={deleteChildClick}
             />
           ))
         }
@@ -74,6 +91,10 @@ const List = () =>  {
             className="form-control"
           />
         </div>
+        <label>
+            {emptyInputText}
+        </label>
+        <br></br>
         <button
           onClick={handleAddTaskClick}
           className="btn btn-primary"
@@ -81,7 +102,7 @@ const List = () =>  {
           Add new task
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
