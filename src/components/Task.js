@@ -66,7 +66,7 @@ const Task = ({title, status, id, onClick, onDeleteClick}) =>  {
 Task.propTypes = { 
   title: PropTypes.string,
   status: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.string,
   onClick: PropTypes.func,
 };
 

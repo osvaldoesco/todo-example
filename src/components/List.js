@@ -27,10 +27,10 @@ const List = () =>  {
 
   const [taskList, setTaskList] = useState(tasks);
   const [inputText, setInputText] = useState('');
-  const [emptyInputText, setEmptyInputText] = useState('');
+  const [emptyInputText, setEmptyInputText] = useState(false);
 
   const handleAddTaskClick = () => {
-    if(inputText != ''){
+    if(inputText !== ''){
       const newTask = {
         id: uuidv4(),
         title: inputText,
@@ -38,14 +38,10 @@ const List = () =>  {
       };
       setTaskList([...taskList, newTask]);
       setInputText('');
-      setEmptyInputText('');
+      setEmptyInputText(false);
     }else{
-      setEmptyInputText(<div class="alert alert-danger" role="alert">
-      El campo no puede estar vacio</div>);
-    }
-
-
-    
+      setEmptyInputText(true);
+    } 
   }
 
   const childClick = (id, st) => {
@@ -59,7 +55,7 @@ const List = () =>  {
   }
 
   const deleteChildClick = (childId) => {
-    const newTaskList = taskList.filter(({id}) => id != childId);
+    const newTaskList = taskList.filter(({id}) => id !== childId);
     setTaskList(newTaskList);
   }
 
@@ -73,6 +69,7 @@ const List = () =>  {
               title={title} 
               status={status} 
               id={id} 
+              key={id}
               onClick={childClick}
               onDeleteClick={deleteChildClick}
             />
@@ -92,7 +89,11 @@ const List = () =>  {
           />
         </div>
         <label>
-            {emptyInputText}
+            {emptyInputText &&
+              <div className="alert alert-danger" role="alert">
+                El campo no puede estar vacio
+              </div>
+            }
         </label>
         <br></br>
         <button
